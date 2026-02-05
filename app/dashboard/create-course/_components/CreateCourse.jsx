@@ -31,7 +31,7 @@ function CreateCourse({next}) {
         <div className='bg-indigo-100 p-3 rounded-full'>
             <NotebookPen className='h-8 w-8 text-indigo-600' />
         </div>
-        <div className=' flex'>
+        <div className=''>
             <h2 className='text-2xl  font-bold text-slate-800'>Create New Course</h2>
             <p className='text-sm text-slate-500'>Choose your content source and target audience</p>
         </div>

@@ -79,10 +79,10 @@ function Hero() {
                   </svg>
                 </span>
 
+              </Link>
                 <span className="text-sm font-medium transition-all group-hover:ms-4">
                 <Link href="/dashboard">  Generate Course</Link>
                 </span>
-              </Link>
 
               <Link
                 className="inline-block rounded-lg border border-slate-300 bg-white px-8 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring active:text-slate-500"

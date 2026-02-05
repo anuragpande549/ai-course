@@ -1,8 +1,12 @@
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import React from 'react'
+import { currentUser } from '@clerk/nextjs/server';
+import Link from 'next/link';
 
-function Header() {
+async function Header() {
+  const userInfo = await currentUser()
+
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between h-16 px-6 border-b border-slate-200 bg-slate-50/80 backdrop-blur-md transition-all">
       {/* Logo Section */}
@@ -15,22 +19,20 @@ function Header() {
 
       {/* Navigation Links */}
       <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-        <a href="#features" className="transition-colors hover:text-indigo-600">Features</a>
-        <a href="#how-it-works" className="transition-colors hover:text-indigo-600">How it Works</a>
-        <a href="#pricing" className="transition-colors hover:text-indigo-600">Pricing</a>
-        <a href="#about" className="transition-colors hover:text-indigo-600">About</a>
+        <Link href="#features" className="transition-colors hover:text-indigo-600">Features</Link>
+        <Link href="#how-it-works" className="transition-colors hover:text-indigo-600">How it Works</Link>
+        <Link href="#pricing" className="transition-colors hover:text-indigo-600">Pricing</Link>
+        <Link href="#about" className="transition-colors hover:text-indigo-600">About</Link>
       </nav>
 
       {/* Call to Action */}
       <div className="flex items-center gap-4">
         {/* Optional: Add a subtle 'Log in' text link before the button */}
-        <a href="#" className="hidden sm:block text-sm font-medium text-slate-700 hover:text-indigo-600 transition-colors">
-            Log in
-        </a>
-        
-        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-200 transition-all hover:shadow-indigo-300">
-            Get Started
-        </Button>
+
+        <Link href="/dashboard" className="bg-indigo-600 p-2 rounded-xl hover:bg-indigo-700 text-white shadow-sm shadow-indigo-200 transition-all hover:shadow-indigo-300">
+            {userInfo?`Dashboard`:'Login'}
+        </Link>
+
       </div>
     </header>
   )

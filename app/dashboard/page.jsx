@@ -1,8 +1,13 @@
 import React from 'react'
+import { UserButton } from '@clerk/nextjs'
+import Dashboard from './_components/Dashboard'
+
 
 function page() {
   return (
-    <div>page</div>
+    <div>
+      <Dashboard />
+    </div>
   )
 }
 

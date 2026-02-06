@@ -123,3 +123,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* NProgress custom styles */
+#nprogress .bar {
+  background: rgb(138, 8, 132); /* Indigo */
+  height: 17px;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #1106e1, 0 0 5px #4f46e5;
+}

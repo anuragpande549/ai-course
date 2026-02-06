@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider, GoogleOneTap } from "@clerk/nextjs";
+import ProgressBar from "@/app/_components/ProgressBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,19 +26,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // --- 2. Add the appearance prop to match your Indigo theme ---
+
     <ClerkProvider 
       appearance={{
         layout: {
-          logoImageUrl: '/logo.svg', // If you have a logo in public folder
+          logoImageUrl: '/logo.svg', 
         },
         variables: {
-          colorPrimary: '#4f46e5', // This matches the indigo-600 from your Hero section
+          colorPrimary: '#4f46e5', 
         } 
       }}
     >
 
         <GoogleOneTap/>
+        <ProgressBar />
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, SquarePlus, Shield, Settings, LogOut, Zap } from 'lucide-react'
-
+import { useClerk } from '@clerk/nextjs'
 function SideBar() {
     const path = usePathname();
 
@@ -44,9 +44,12 @@ function SideBar() {
             id: 6,
             name: "Logout",
             icon: LogOut,
-            path: "/dashboard/logout",
+            // path: "/dashboard/logout",
+            onClick: ()=> signOut()
         },
     ]
+
+    const {signOut} = useClerk();
 
     return (
         <div className='fixed h-full md:w-64 p-5 shadow-md border-r border-slate-200 bg-white flex flex-col'>
@@ -64,9 +67,15 @@ function SideBar() {
                 <ul className='space-y-2'>
                     {MenuList.map((item) => (
                         <li key={item.id}>
-                            <Link href={item.path}>
+                            {item.path? (
+
+                            <Link 
+                            
+                            onClick={item.onClick|| (()=>{})}
+                            href={item?.path}>
+                                
                                 <div className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-300
-                                    ${path === item.path 
+                                    ${path === item?.path 
                                         ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' 
                                         : 'text-slate-600 hover:bg-slate-100 hover:text-indigo-600'
                                     }`}>
@@ -74,6 +83,12 @@ function SideBar() {
                                     <span className="font-medium">{item.name}</span>
                                 </div>
                             </Link>
+                            ) : (
+                                <button onClick={item.onClick} className={`w-full flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-300 text-slate-600 hover:bg-slate-100 hover:text-indigo-600`} >
+                  <item.icon className="w-5 h-5" />
+                  <span className="font-medium">{item.name}</span>
+                </button>
+                            )}
                         </li>
                     ))}
                 </ul>

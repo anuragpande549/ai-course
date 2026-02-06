@@ -58,7 +58,7 @@ function Hero() {
             </p>
 
             <div className="mt-8 flex justify-center gap-4">
-              <Link
+              <div
                 className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-indigo-600 px-8 py-3 text-white focus:outline-none focus:ring active:bg-indigo-500"
                 href="#"
               >
@@ -77,12 +77,13 @@ function Hero() {
                       d="M17 8l4 4m0 0l-4 4m4-4H3"
                     />
                   </svg>
+               
                 </span>
 
-              </Link>
-                <span className="text-sm font-medium transition-all group-hover:ms-4">
-                <Link href="/dashboard">  Generate Course</Link>
+                <span className="text-sm font-medium transition-all  group-hover:ms-4">
+                <Link href="/dashboard" >  Generate Course</Link>
                 </span>
+              </div>
 
               <Link
                 className="inline-block rounded-lg border border-slate-300 bg-white px-8 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring active:text-slate-500"

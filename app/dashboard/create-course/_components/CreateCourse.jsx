@@ -1,7 +1,6 @@
 "use client"
 
-
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { NotebookPen, LayoutGrid, Lightbulb, FileUp, ClipboardList, CloudUpload, BarChart } from 'lucide-react'
 import { useContext } from 'react';
 import { UserInputConext } from '../../../_context/userInputContext';
@@ -18,7 +17,7 @@ function CreateCourse({next}) {
             setUserCourseInput((prev)=>(
                 {
                     ...prev,
-                    CreateCourse:CreateCourse
+                   topic: category
                 }
             ))
         }

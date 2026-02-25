@@ -1,16 +1,10 @@
-'use client'
 import React from 'react'
-import { UserInputConext } from '../../_context/userInputContext'
-import { useState } from 'react'
+// We already wrapped Root layout with UserContextProvider, so we don't need it here.
 
-
-function CreateCourseLayout({children}) {
-    const [userCourseInput, setUserCourseInput] = useState([])
+function CreateCourseLayout({ children }) {
   return (
-      <div>
-        <UserInputConext.Provider value={{setUserCourseInput,userCourseInput}}>       
-        {children}
-    </UserInputConext.Provider>
+    <div>
+      {children}
     </div>
   )
 }

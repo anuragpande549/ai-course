@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider, GoogleOneTap } from "@clerk/nextjs";
 import ProgressBar from "@/app/_components/ProgressBar";
+import { UserContextProvider } from "@/app/_context/userInputContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,24 +28,26 @@ export default function RootLayout({
 }>) {
   return (
 
-    <ClerkProvider 
+    <ClerkProvider
       appearance={{
         layout: {
-          logoImageUrl: '/logo.svg', 
+          logoImageUrl: '/logo.svg',
         },
         variables: {
-          colorPrimary: '#4f46e5', 
-        } 
+          colorPrimary: '#4f46e5',
+        }
       }}
     >
 
-        <GoogleOneTap/>
-        <ProgressBar />
+      <GoogleOneTap />
+      <ProgressBar />
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+
         >
-          {children}
+          <UserContextProvider>
+            {children}
+          </UserContextProvider>
         </body>
       </html>
     </ClerkProvider>

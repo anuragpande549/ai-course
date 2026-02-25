@@ -1,154 +1,168 @@
 "use client"
 
-import  { useState } from 'react'
-import { NotebookPen, LayoutGrid, Lightbulb, FileUp, ClipboardList, CloudUpload, BarChart } from 'lucide-react'
-import { useContext } from 'react';
-import { UserInputConext } from '../../../_context/userInputContext';
+import { useState } from 'react'
+import { LayoutGrid, Lightbulb, FileUp, CloudUpload, BarChart, AlertCircle, ArrowRight } from 'lucide-react'
+import { useUserContext } from '../../../_context/userInputContext';
 
-function CreateCourse({next}) {
-      const [activeMode, setActiveMode] = useState('manual'); // 'manual' or 'upload'
-      const [loading, setLoading] = useState(false);
-      const [difficulty, setDifficulty] = useState('Beginner'); // Default level
-    
-      const levels = ['Beginner', 'Intermediate', 'Advanced'];
-        const {userCourseInput, setUserCourseInput} = useContext(UserInputConext)
-    
-        const HandleCreateCourseChange = (category)=>{
-            setUserCourseInput((prev)=>(
-                {
-                    ...prev,
-                   topic: category
-                }
-            ))
-        }
-  return (
+function CreateCourse({ next }) {
+    const { userCourseInput, setUserCourseInput } = useUserContext();
 
-    <div className='p-6 md:px-20 lg:px-44 mt-10'>
-      
-      {/* Header Section */}
-      <div className='flex  items-center gap-4 mb-8'>
-        <div className='bg-indigo-100 p-3 rounded-full'>
-            <NotebookPen className='h-8 w-8 text-indigo-600' />
-        </div>
-        <div className=''>
-            <h2 className='text-2xl  font-bold text-slate-800'>Create New Course</h2>
-            <p className='text-sm text-slate-500'>Choose your content source and target audience</p>
-        </div>
-      </div>
+    // Ensure we have a valid initial state from context
+    const [activeMode, setActiveMode] = useState(userCourseInput?.mode || 'manual');
+    const [difficulty, setDifficulty] = useState(userCourseInput?.difficulty || 'Beginner');
+    const [topic, setTopic] = useState(userCourseInput?.topic || '');
+    const [description, setDescription] = useState(userCourseInput?.description || '');
 
-      {/* Mode Selection Tabs */}
-      <div className='grid grid-cols-2 gap-4 mb-8 max-w-lg'>
-        <div 
-            onClick={() => setActiveMode('manual')}
-            className={`flex flex-col items-center p-4 border rounded-xl cursor-pointer transition-all duration-200
-            ${activeMode === 'manual' 
-                ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm' 
-                : 'border-slate-200 hover:border-indigo-300 text-slate-500'}`}
-        >
-            <ClipboardList className='h-6 w-6 mb-2' />
-            <span className='font-semibold text-sm'>Topic & Description</span>
-        </div>
+    const levels = ['Beginner', 'Intermediate', 'Advanced'];
+    const [loading, setLoading] = useState(false);
 
-        <div 
-            onClick={() => setActiveMode('upload')}
-            className={`flex flex-col items-center p-4 border rounded-xl cursor-pointer transition-all duration-200
-            ${activeMode === 'upload' 
-                ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm' 
-                : 'border-slate-200 hover:border-indigo-300 text-slate-500'}`}
-        >
-            <FileUp className='h-6 w-6 mb-2' />
-            <span className='font-semibold text-sm'>Upload Syllabus PDF</span>
-        </div>
-      </div>
+    const handleNext = () => {
+        // Update global state before moving to next step
+        setUserCourseInput(prev => ({
+            ...prev,
+            mode: activeMode,
+            difficulty: difficulty,
+            topic: topic,
+            description: description,
+        }));
+        if (next) next();
+    };
 
-      {/* Main Form Container */}
-      <div className='border rounded-xl p-8 shadow-sm bg-white'>
-        
-        {/* --- DYNAMIC CONTENT (Based on Mode) --- */}
-        <div className='mb-8'>
-            {activeMode === 'manual' ? (
-                <div className='animate-in fade-in slide-in-from-top-2 duration-300 space-y-6'>
+    return (
+        <div className='min-h-screen bg-slate-50 text-[#1c1d1f] font-sans pb-20 pt-10'>
+            <div className='max-w-3xl mx-auto px-6'>
+
+                {/* Header Section */}
+                <div className='mb-8'>
+                    <h1 className='text-3xl font-bold font-serif text-slate-900 mb-2'>Create New Course</h1>
+                    <p className='text-sm text-slate-600'>Choose your content source and target audience to begin structuring your curriculum.</p>
+                </div>
+
+                {/* Information Banner */}
+                <div className='bg-white border border-slate-300 p-4 mb-8 flex items-start gap-3 text-sm text-slate-700'>
+                    <AlertCircle className='w-5 h-5 text-slate-900 shrink-0 mt-0.5' />
                     <div>
-                        <label className='text-sm font-semibold text-slate-700 flex items-center gap-2 mb-2'>
-                            <LayoutGrid className='h-4 w-4 text-indigo-600'/>
-                            Course Topic
-                        </label>
-                        <input 
-                            type="text" 
-                            placeholder="e.g. Python for Beginners..." 
-                            className='w-full border border-slate-300 rounded-lg p-3 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all'
-                        />
-                    </div>
-                    <div>
-                        <label className='text-sm font-semibold text-slate-700 flex items-center gap-2 mb-2'>
-                            <Lightbulb className='h-4 w-4 text-indigo-600'/>
-                            Description / Requirements
-                        </label>
-                        <textarea 
-                            rows={4}
-                            placeholder="Describe specific modules or key takeaways..." 
-                            className='w-full border border-slate-300 rounded-lg p-3 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none'
-                        />
+                        <p>You can generate a course structure manually by providing a topic and description, or by uploading an existing syllabus PDF. Our AI will handle the rest.</p>
                     </div>
                 </div>
-            ) : (
-                <div className='animate-in fade-in slide-in-from-top-2 duration-300'>
-                    <label className='text-sm font-semibold text-slate-700 flex items-center gap-2 mb-4'>
-                        <FileUp className='h-4 w-4 text-indigo-600'/>
-                        Upload Course Syllabus (PDF)
-                    </label>
-                    
-                    <div className='flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 hover:bg-slate-100 hover:border-indigo-400 transition-all cursor-pointer'>
-                        <CloudUpload className='h-10 w-10 text-indigo-500 mb-3' />
-                        <p className='text-sm font-medium text-slate-700'>Click to upload or drag and drop</p>
-                        <p className='text-xs text-slate-500 mt-1'>PDF files only (max 10MB)</p>
-                        <input type="file" accept=".pdf" className='hidden' />
-                    </div>
-                </div>
-            )}
-        </div>
 
-        {/* --- COMMON SECTION: Difficulty Level --- */}
-        <div className='mb-8'>
-             <label className='text-sm font-semibold text-slate-700 flex items-center gap-2 mb-4'>
-                <BarChart className='h-4 w-4 text-indigo-600'/>
-                Select Difficulty Level
-            </label>
-            
-            <div className='grid grid-cols-3 gap-3'>
-                {levels.map((item) => (
-                    <div 
-                        key={item}
-                        onClick={() => setDifficulty(item)}
-                        className={`p-3 text-center rounded-lg border cursor-pointer transition-all
-                        ${difficulty === item 
-                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-200' 
-                            : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50'
-                        }`}
-                    >
-                        <span className='text-sm font-medium'>{item}</span>
+                {/* Main Form Container */}
+                <div className='bg-white border border-slate-300'>
+
+                    {/* Mode Selection Tabs (Udemy Style) */}
+                    <div className='flex border-b border-slate-200 px-6 pt-2'>
+                        <button
+                            onClick={() => setActiveMode('manual')}
+                            className={`pb-3 px-4 font-bold text-sm transition-colors mt-4 relative ${activeMode === 'manual'
+                                    ? 'text-slate-900 border-b-4 border-slate-900'
+                                    : 'text-slate-500 hover:text-slate-900'
+                                }`}
+                        >
+                            Topic & Description
+                        </button>
+                        <button
+                            onClick={() => setActiveMode('upload')}
+                            className={`pb-3 px-4 font-bold text-sm transition-colors mt-4 relative ${activeMode === 'upload'
+                                    ? 'text-slate-900 border-b-4 border-slate-900'
+                                    : 'text-slate-500 hover:text-slate-900'
+                                }`}
+                        >
+                            Upload Syllabus PDF
+                        </button>
                     </div>
-                ))}
+
+                    <div className='p-6 md:p-8'>
+                        {/* --- DYNAMIC CONTENT (Based on Mode) --- */}
+                        <div className='mb-10 min-h-[160px]'>
+                            {activeMode === 'manual' ? (
+                                <div className='space-y-6 animate-in fade-in duration-300'>
+                                    <div>
+                                        <label className='block text-xs font-bold text-slate-900 mb-2 uppercase tracking-wide flex items-center gap-2'>
+                                            <LayoutGrid className='h-4 w-4' /> Course Topic
+                                        </label>
+                                        <input
+                                            value={topic}
+                                            onChange={(e) => setTopic(e.target.value)}
+                                            type="text"
+                                            placeholder="e.g. Python for Beginners, Advanced UI/UX Design..."
+                                            maxLength={60}
+                                            className='w-full border border-slate-900 p-3 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 placeholder:text-slate-400'
+                                        />
+                                        <p className="text-xs text-slate-500 mt-2 text-right">{topic.length}/60</p>
+                                    </div>
+                                    <div>
+                                        <label className='block text-xs font-bold text-slate-900 mb-2 uppercase tracking-wide flex items-center gap-2'>
+                                            <Lightbulb className='h-4 w-4' /> Description / Requirements
+                                        </label>
+                                        <textarea
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                            rows={4}
+                                            placeholder="Describe specific modules, learning outcomes, or key takeaways..."
+                                            className='w-full border border-slate-900 p-3 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900 placeholder:text-slate-400 resize-none'
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className='animate-in fade-in duration-300'>
+                                    <label className='block text-xs font-bold text-slate-900 mb-2 uppercase tracking-wide flex items-center gap-2'>
+                                        <FileUp className='h-4 w-4' /> Upload Course Syllabus
+                                    </label>
+
+                                    <div className='flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 hover:border-slate-500 transition-colors cursor-pointer group'>
+                                        <div className="bg-white p-4 border border-slate-200 rounded-full mb-3 group-hover:shadow-sm transition-shadow">
+                                            <CloudUpload className='h-6 w-6 text-slate-700' />
+                                        </div>
+                                        <p className='text-sm font-bold text-slate-900'>Click to upload or drag and drop</p>
+                                        <p className='text-xs text-slate-500 mt-1'>PDF files only (max 10MB)</p>
+                                        <input type="file" accept=".pdf" className='hidden' />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* --- COMMON SECTION: Difficulty Level --- */}
+                        <div className='mb-10'>
+                            <label className='block text-xs font-bold text-slate-900 mb-3 uppercase tracking-wide flex items-center gap-2'>
+                                <BarChart className='h-4 w-4' /> Select Difficulty Level
+                            </label>
+
+                            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+                                {levels.map((item) => (
+                                    <div
+                                        key={item}
+                                        onClick={() => setDifficulty(item)}
+                                        className={`p-4 text-center border cursor-pointer transition-colors font-bold text-sm
+                                            ${difficulty === item
+                                                ? 'bg-slate-900 text-white border-slate-900'
+                                                : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+                                            }`}
+                                    >
+                                        {item}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className='flex justify-end gap-3 p-6 border-t border-slate-200 bg-slate-50'>
+                        <button className='px-6 py-3 border border-slate-900 text-slate-900 font-bold text-sm hover:bg-slate-100 transition-colors'>
+                            Cancel
+                        </button>
+                        <button
+                            disabled={loading || (activeMode === 'manual' && (!topic || !description))}
+                            onClick={handleNext}
+                            className='px-6 py-3 bg-slate-900 border border-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2'
+                        >
+                            {loading ? 'Processing...' : 'Continue'} <ArrowRight className="w-4 h-4" />
+                        </button>
+                    </div>
+
+                </div>
             </div>
         </div>
-
-        {/* Footer Actions */}
-        <div className='flex justify-end gap-4 pt-4 border-t border-slate-100'>
-            <button className='px-6 py-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 font-medium transition-colors'>
-                Cancel
-            </button>
-            <button 
-                disabled={loading}
-                onClick={()=>next()}
-                className='px-6 py-2 bg-indigo-600 rounded-lg text-white font-medium hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200 disabled:opacity-50'
-            >
-                {loading ? 'Processing...' : activeMode === 'upload' ? 'Upload & Generate' : 'Generate Course'}
-            </button>
-        </div>
-
-      </div>
-    </div>
-  )
+    )
 }
 
 export default CreateCourse

@@ -2,7 +2,7 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 // Define which routes should be protected
 // This regex matches /dashboard and any sub-route like /dashboard/courses
-const isProtectedRoute = createRouteMatcher(['/dashboard(.*)']);
+const isProtectedRoute = createRouteMatcher(['/dashboard(.*)', "/api(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
   // If the user tries to access a protected route, restrict access

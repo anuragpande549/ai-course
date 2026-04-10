@@ -31,6 +31,7 @@ export async function POST(request) {
         `;
 
         const result = await GenerateCourseLayout_AI.generateContent(prompt);
+        console.log({result})
         let responseText = result.response.text();
         responseText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
         const courseLayoutJson = JSON.parse(responseText);
